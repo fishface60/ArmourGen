@@ -145,6 +145,7 @@ class Armour:
 			self.appendNotes("Split DR: provides full protection against burning attacks and uses its reduced DR against all other types of damage.")
 			self.specDR = self.DR*self.material.specDRMult
 		if "Flexible" in self.keywords and self.DR <= self.material.DRperInch*0.25:
+			self.appendNotes("Flexible: subject to blunt trauma.")
 			self.flex = True
 			self.asterisk = "*"
 		if "LaserOnly" in self.keywords:
