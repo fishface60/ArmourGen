@@ -197,7 +197,17 @@ class Armour:
 		else:
 			self.cost = round((self.weight*self.material.CM*self.construction.CC))
 	def LCCalc(self):
-		pass				# LC calculation here. There's no LC calculation for Low-Tech armour, but there is for Ultra-Tech.
+		# NOTE: LC is pretty arbitrary. Many additional rules may be
+		# introduced to make it line up with existing items, but this
+		# is simple enough for full suits.
+		if self.DR * 6 <= self.material.maxDR:
+			self.LC = 4
+		elif self.DR * 4 <= self.material.maxDR:
+			self.LC = 3
+		elif self.DR * 2 <= self.material.maxDR:
+			self.LC = 2
+		else:
+			self.LC = 1
 	def output(self):
 		print("\nArmour Name: {}".format(self.name))
 		if "Superscience" in self.material.keywords:
@@ -214,6 +224,7 @@ class Armour:
 			print("DR: {}/{}{}".format(str(round(self.DR)),str(round(self.specDR)),self.asterisk))
 		print("Weight: {}".format(str(self.weight)))
 		print("Cost: {}".format(str(self.cost)))
+		print("LC: {}".format(str(self.LC)))
 		print("Locations: {}".format(str(self.locations.name)))
 		print("Time to Don: {}".format(str(self.timeToDon)))
 		print("Notes: {}".format(str(self.notes)))
@@ -236,6 +247,7 @@ class Armour:
 		print("Time to Don: {}".format(str(self.timeToDon)))
 		print("Weight: {}".format(str(self.weight)))
 		print("Cost: {}".format(str(self.cost)))
+		print("LC: {}".format(str(self.LC)))
 		print("Locations: {}".format(str(self.locations.name)))
 		print("Notes: {}".format(str(self.notes)))
 		print("Material: {}".format(str(self.material.name)))
