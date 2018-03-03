@@ -1,5 +1,6 @@
 DEBUG = False
 
+import math
 import os.path
 from uuid import uuid4
 import xml.etree.ElementTree as ET
@@ -13,6 +14,11 @@ from HitLocationLibrary import *
 MasterConstructionList = [Fabric, LayeredFabric, Scale, Mail, SegmentedPlate, Plate, Solid, ImpactAbsorbing, OptimisedFabric]
 MasterMaterialList = [Bone, Cloth, Horn, Leather, Silk, Wood, CheapBronze, GoodBronze, Copper, Jade, GemJade, Stone, CheapIron, GoodIron, Lead,StrongSteel, HardSteel, Aluminium, HardSteel, HighStrengthSteel, Rubber, BallisticResin, BasicCeramic, ElasticPolymer, Fibreglass, HighStrengthAluminium, Nomex, Nylon, Plastic, Polycarbonate, Titanium, TitaniumAlloy, VeryHardSteel, Aramid, BallisticPolymer, ImpBallisticPolymer, ImpCeramic, ImpKevlar, ImpNomex, Kevlar, LaminatedPolycarbonate, PolymerComposite, TitaniumComposite, UltraStrengthSteel, Arachnoweave, CeramicNanocomposite, EarlyNanoweave, LaserAblativePolymer, MagneticLiquidArmour, PolymerNanocomposite, Reflec, ShearThickeningFluidArmour, TitaniumNanocomposite, AdvancedNanoLaminate, AdvancedPolymerNanocomposite, AdvancedNanoweave, Bioplas, ElectromagneticArmour, NanoAblativePolymer, Diamondoid, DiamondoidLaminate, Monocrys, RetroReflective, EnergyCloth, Hyperdense, HyperdenseLaminate, Adamant, Orichalcum]
 MasterQualityList = ["QualityCheap", "QualityFine", "QualityVeryFine", "PropertyBandedMail", "PropertyElvenMail", "PropertyFluted", "PropertyHighlyArticulated", "PropertyMountainScale", "PropertyThieves"]
+
+
+def _round2sf(n):
+	return round(n, -int(math.floor(math.log10(abs(n))) - 1))
+
 
 ### ARMOUR CLASS ###
   # Defines the main armour class, along with its internal functions.
@@ -194,14 +200,14 @@ class Armour:
 		else:
 			self.timeToDon = self.locations.surfaceArea*self.construction.don
 	def weightCalc(self):
-		self.weight = round(self.locations.surfaceArea*self.material.WM*self.construction.CW*self.DR)
+		self.weight = self.locations.surfaceArea*self.material.WM*self.construction.CW*self.DR
 	def costCalc(self):
 		if self.TL >= 6 and self.material in [StrongSteel,HardSteel]:
-			self.cost = round((self.weight*self.material.CM*self.construction.CC)*0.04)
+			self.cost = (self.weight*self.material.CM*self.construction.CC)*0.04
 		elif self.TL >= self.material.costBreakTL:
-			self.cost = round((self.weight*self.material.CM*self.construction.CC)*self.material.costBreakMult)
+			self.cost = (self.weight*self.material.CM*self.construction.CC)*self.material.costBreakMult
 		else:
-			self.cost = round((self.weight*self.material.CM*self.construction.CC))
+			self.cost = self.weight*self.material.CM*self.construction.CC
 	def LCCalc(self):
 		# NOTE: LC is pretty arbitrary. Many additional rules may be
 		# introduced to make it line up with existing items, but this
@@ -228,8 +234,8 @@ class Armour:
 			print("DR: {}/{}{}".format(str(round(self.specDR)),str(round(self.DR)),self.asterisk))
 		elif self.DR > self.specDR:
 			print("DR: {}/{}{}".format(str(round(self.DR)),str(round(self.specDR)),self.asterisk))
-		print("Weight: {}".format(str(self.weight)))
-		print("Cost: {}".format(str(self.cost)))
+		print("Weight: {}".format(str(_round2sf(self.weight))))
+		print("Cost: {}".format(str(_round2sf(self.cost))))
 		print("LC: {}".format(str(self.LC)))
 		print("Locations: {}".format(str(self.locations.name)))
 		print("Time to Don: {}".format(str(self.timeToDon)))
@@ -258,10 +264,10 @@ class Armour:
 		legality_class.text = str(self.LC)
 
 		value = ET.SubElement(equipment, "value")
-		value.text = str(self.cost)
+		value.text = str(_round2sf(self.cost))
 
 		weight = ET.SubElement(equipment, "weight")
-		weight.text = str(self.weight)
+		weight.text = str(_round2sf(self.weight))
 
 		notes = ET.SubElement(equipment, "notes")
 		notes.text = str(self.notes)
@@ -304,8 +310,8 @@ class Armour:
 		elif self.DR > self.specDR:
 			print("DR: {}/{}{}".format(str(round(self.DR)),str(round(self.specDR)),self.asterisk))
 		print("Time to Don: {}".format(str(self.timeToDon)))
-		print("Weight: {}".format(str(self.weight)))
-		print("Cost: {}".format(str(self.cost)))
+		print("Weight: {}".format(str(_round2sf(self.weight))))
+		print("Cost: {}".format(str(_round2sf(self.cost))))
 		print("LC: {}".format(str(self.LC)))
 		print("Locations: {}".format(str(self.locations.name)))
 		print("Notes: {}".format(str(self.notes)))
