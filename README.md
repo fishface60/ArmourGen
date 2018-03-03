@@ -22,7 +22,6 @@ This is a Python3 program that automates the rules from the *Eidetic Memory: Low
 * Materials from **_GURPS Dungeon Fantasy_**: metoric iron, dragonbone and dragonhide.
 * Materials from **_GURPS Magic_**: essential wood.
 * Additional third-party material libraries.
-* Automatic output of statistics into XML format for GURPS Character Sheet.
 * Complex armour creation – distinct pieces with different constructions and materials layered or connected together.
 * Random armour generation.
 * Graphical user interface (GUI).
