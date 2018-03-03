@@ -172,7 +172,7 @@ class Armour:
 			self.specDR = self.DR/2.0
 		if "WeakToImpaling" in self.keywords and self.material.TL <= 4:
 			self.appendNotes("-1 DR vs. impaling.")
-		if "WeakToCrushing" in self.keywords and self.construction == Scale and self.DR < 5:
+		if "WeakToCrushing" in self.keywords and self.construction in (Scale, UltraTechScale) and self.DR < 5:
 			self.appendNotes("-1 DR vs. crushing.")
 		if "WeakToCrushing" in self.keywords and self.construction == Mail:
 			if self.DR > 10:
@@ -359,7 +359,7 @@ Please use the exact capitalisation, spacing and spelling. Not all materials are
 	TempMaterial = eval(input("Please enter the material of your armour:\n"))
 
 	print("""\nThe construction types you can use are:
-  Fabric, LayeredFabric, Scale, Mail, SegmentedPlate, Plate and Solid, OptimisedFabric and ImpactAbsorbing.
+  Fabric, LayeredFabric, Scale, Mail, SegmentedPlate, Plate, Solid, OptimisedFabric, ImpactAbsorbing and UltraTechScale.
 
 Please use the exact capitalisation, spacing and spelling, otherwise the calculations may fail.\n""")
 

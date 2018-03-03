@@ -112,3 +112,14 @@ OptimisedFabric = ArmourConstruction(
 			keywords=[]
 			)
 
+### TECH AND TOYS IV ###
+
+UltraTechScale = ArmourConstruction(
+			name="Scale",
+			TL=9,
+			CW=1.1,
+			CC=0.8,
+			don=4.28,
+			minDR=2,
+			keywords=["Flexible"]
+			)

@@ -807,7 +807,7 @@ PolymerNanocomposite = ArmourMaterial(
 			specDRMult=1.0,
 			costBreakTL=10,
 			costBreakMult=0.25,
-			constructions=[Mail,Plate,SegmentedPlate,Scale,Solid,ImpactAbsorbing],
+			constructions=[Mail,Plate,SegmentedPlate,Scale,Solid,ImpactAbsorbing,UltraTechScale],
 			keywords=[],
 			)
  
@@ -851,7 +851,7 @@ TitaniumNanocomposite = ArmourMaterial(
 			specDRMult=1.0,
 			costBreakTL=10,
 			costBreakMult=0.24,
-			constructions=[Mail,Plate,SegmentedPlate,Scale,Solid,ImpactAbsorbing],
+			constructions=[Mail,Plate,SegmentedPlate,Scale,Solid,ImpactAbsorbing,UltraTechScale],
 			keywords=[],
 			)
 
@@ -869,7 +869,7 @@ AdvancedNanoLaminate = ArmourMaterial(
 			specDRMult=1.0,
 			costBreakTL=11,
 			costBreakMult=0.5,
-			constructions=[Plate,SegmentedPlate,Scale,Solid,ImpactAbsorbing],
+			constructions=[Plate,SegmentedPlate,Scale,Solid,ImpactAbsorbing,UltraTechScale],
 			keywords=["Laminate"],
 			)
 
@@ -884,7 +884,7 @@ AdvancedPolymerNanocomposite = ArmourMaterial(
 			specDRMult=1.0,
 			costBreakTL=11,
 			costBreakMult=0.5,
-			constructions=[Mail,Plate,SegmentedPlate,Scale,Solid,ImpactAbsorbing],
+			constructions=[Mail,Plate,SegmentedPlate,Scale,Solid,ImpactAbsorbing,UltraTechScale],
 			keywords=["Transparent"],
 			)
 
@@ -930,7 +930,7 @@ ElectromagneticArmour = ArmourMaterial(
 			specDRMult=1.0,
 			costBreakTL=11,
 			costBreakMult=0.5,
-			constructions=[Plate,SegmentedPlate,Scale,Solid],
+			constructions=[Plate,SegmentedPlate,Scale,Solid,UltraTechScale],
 			keywords=["Powered"],
 			)
 
@@ -962,7 +962,7 @@ Diamondoid = ArmourMaterial(
 			specDRMult=1.0,
 			costBreakTL=12,
 			costBreakMult=0.5,
-			constructions=[Mail,Plate,SegmentedPlate,Scale,Solid,ImpactAbsorbing],
+			constructions=[Mail,Plate,SegmentedPlate,Scale,Solid,ImpactAbsorbing,UltraTechScale],
 			keywords=["Transparent"],
 			)
 
@@ -978,7 +978,7 @@ DiamondoidLaminate = ArmourMaterial(
 			specDRMult=1.0,
 			costBreakTL=12,
 			costBreakMult=0.5,
-			constructions=[Plate,SegmentedPlate,Scale,Solid,ImpactAbsorbing],
+			constructions=[Plate,SegmentedPlate,Scale,Solid,ImpactAbsorbing,UltraTechScale],
 			keywords=["Laminate"],
 			)
 
@@ -1041,7 +1041,7 @@ Hyperdense = ArmourMaterial(
 			specDRMult=1.0,
 			costBreakTL=1000,
 			costBreakMult=1.0,
-			constructions=[Mail,Plate,SegmentedPlate,Scale,Solid,ImpactAbsorbing],
+			constructions=[Mail,Plate,SegmentedPlate,Scale,Solid,ImpactAbsorbing,UltraTechScale],
 			keywords=["Laminate"],
 			)
 
@@ -1057,7 +1057,7 @@ HyperdenseLaminate = ArmourMaterial(
 			specDRMult=1.0,
 			costBreakTL=1000,
 			costBreakMult=1.0,
-			constructions=[Plate,SegmentedPlate,Scale,Solid,ImpactAbsorbing],
+			constructions=[Plate,SegmentedPlate,Scale,Solid,ImpactAbsorbing,UltraTechScale],
 			keywords=["Laminate"],
 			)
 
