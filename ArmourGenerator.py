@@ -2,50 +2,22 @@ DEBUG = False
 
 from ConstructionLibrary import *
 from BaseMaterialLibrary import *
-#from HitLocationLibrary import *
+from HitLocationLibrary import *
 
 # Some master lists to have all valid objects of a type in one place, for easy reference and checking.
 MasterConstructionList = [Fabric, LayeredFabric, Scale, Mail, SegmentedPlate, Plate, Solid, ImpactAbsorbing, OptimisedFabric]
 MasterMaterialList = [Bone, Cloth, Horn, Leather, Silk, Wood, CheapBronze, GoodBronze, Copper, Jade, GemJade, Stone, CheapIron, GoodIron, Lead,StrongSteel, HardSteel, Aluminium, HardSteel, HighStrengthSteel, Rubber, BallisticResin, BasicCeramic, ElasticPolymer, Fibreglass, HighStrengthAluminium, Nomex, Nylon, Plastic, Polycarbonate, Titanium, TitaniumAlloy, VeryHardSteel, Aramid, BallisticPolymer, ImpBallisticPolymer, ImpCeramic, ImpKevlar, ImpNomex, Kevlar, LaminatedPolycarbonate, PolymerComposite, TitaniumComposite, UltraStrengthSteel, Arachnoweave, CeramicNanocomposite, EarlyNanoweave, LaserAblativePolymer, MagneticLiquidArmour, PolymerNanocomposite, Reflec, ShearThickeningFluidArmour, TitaniumNanocomposite, AdvancedNanoLaminate, AdvancedPolymerNanocomposite, AdvancedNanoweave, Bioplas, ElectromagneticArmour, NanoAblativePolymer, Diamondoid, DiamondoidLaminate, Monocrys, RetroReflective, EnergyCloth, Hyperdense, HyperdenseLaminate, Adamant, Orichalcum]
 MasterQualityList = ["QualityCheap", "QualityFine", "QualityVeryFine", "PropertyBandedMail", "PropertyElvenMail", "PropertyFluted", "PropertyHighlyArticulated", "PropertyMountainScale", "PropertyThieves"]
 
-### SURFACE AREAS ###
-  # Defines the hit locations on a humanoid body by their surface area in square feet.
-
-Vitals = 1.0
-Groin = 0.35
-
-Skull = 1.4
-Face = 0.7
-Neck = 0.35
-Chest = 5.25
-Abdomen = 1.75
-Shoulders = 0.7
-UpperArms = 0.7
-lbows = 0.35
-Forearms = 1.75
-Hands = 0.7
-Thighs = 3.15
-Knees = 0.35
-Shins = 3.5
-Feet = 0.7
-
-Head = 2.1
-Torso = 7.0
-Arms = 3.5
-Legs = 7.0
-
-# # #
-
 ### ARMOUR CLASS ###
   # Defines the main armour class, along with its internal functions.
 
 class Armour:
-	def __init__(self, name = "BLANK NAME", TL = 0, DR = 0, surfaceArea = 0, material = ArmourMaterial(), construction = ArmourConstruction()):
+	def __init__(self, name = "BLANK NAME", TL = 0, DR = 0, locations = All, material = ArmourMaterial(), construction = ArmourConstruction()):
 		self.name = name
 		self.TL = TL
 		self.DR = DR
-		self.surfaceArea = surfaceArea
+		self.locations = locations
 		self.material = material
 		self.construction = construction
 
@@ -212,11 +184,11 @@ class Armour:
 			if self.material.TL >= 7:
 				self.timeToDon = 3.0
 			else:
-				self.timeToDon = self.surfaceArea*self.construction.don*2.0/3.0
+				self.timeToDon = self.locations.surfaceArea*self.construction.don*2.0/3.0
 		else:
-			self.timeToDon = self.surfaceArea*self.construction.don
+			self.timeToDon = self.locations.surfaceArea*self.construction.don
 	def weightCalc(self):
-		self.weight = round(self.surfaceArea*self.material.WM*self.construction.CW*self.DR)
+		self.weight = round(self.locations.surfaceArea*self.material.WM*self.construction.CW*self.DR)
 	def costCalc(self):
 		if self.TL >= 6 and self.material in [StrongSteel,HardSteel]:
 			self.cost = round((self.weight*self.material.CM*self.construction.CC)*0.04)
@@ -242,6 +214,7 @@ class Armour:
 			print("DR: {}/{}{}".format(str(round(self.DR)),str(round(self.specDR)),self.asterisk))
 		print("Weight: {}".format(str(self.weight)))
 		print("Cost: {}".format(str(self.cost)))
+		print("Locations: {}".format(str(self.locations.name)))
 		print("Time to Don: {}".format(str(self.timeToDon)))
 		print("Notes: {}".format(str(self.notes)))
 	def GCSOutput(self):
@@ -263,11 +236,12 @@ class Armour:
 		print("Time to Don: {}".format(str(self.timeToDon)))
 		print("Weight: {}".format(str(self.weight)))
 		print("Cost: {}".format(str(self.cost)))
+		print("Locations: {}".format(str(self.locations.name)))
 		print("Notes: {}".format(str(self.notes)))
 		print("Material: {}".format(str(self.material.name)))
 		print("Material TL: {}".format(str(self.material.TL)))
 		print("Construction: {}".format(str(self.construction.name)))
-		print("Total Surface Area: {}".format(str(self.surfaceArea)))
+		print("Total Surface Area: {}".format(str(self.locations.surfaceArea)))
 		print("Final Cost Factor: {}".format(str(self.CF)))
 		print("Keywords: {}".format(str(self.keywords)))
 
@@ -326,7 +300,7 @@ Please use the exact capitalisation, spacing and spelling, otherwise the calcula
 
 You can use any combination of the hit locations and sub-locations, but be aware that there is currently no check to see whether you've entered the same area twice (e.g. Torso and Abdomen). Please use the exact capitalisation, spacing and spelling, and seperate locations with addition signs (+) if you are using more than one location.\n""")
 
-	TempSA = eval(input("Please enter the areas your armour will cover:\n"))
+	TempLocations = eval(input("Please enter the areas your armour will cover:\n"))
 
 	print("""If you want to add qualities or properties, choose from the following:
   Quality Grades: QualityCheap, QualityFine, QualityVeryFine
@@ -347,7 +321,7 @@ You can use any combination of the hit locations and sub-locations, but be aware
 
 	TempName = input("Please enter the name of your armour:\n")
 
-	UserDefinedArmour = Armour(TempName,TempTL,TempDR,TempSA,TempMaterial,TempConstruction)
+	UserDefinedArmour = Armour(TempName,TempTL,TempDR,TempLocations,TempMaterial,TempConstruction)
 	UserDefinedArmour.keywords.extend(TempQualities)
 	UserDefinedArmour.execute()
 
