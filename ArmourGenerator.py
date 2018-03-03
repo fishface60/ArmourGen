@@ -1,5 +1,10 @@
 DEBUG = False
 
+import os.path
+from uuid import uuid4
+import xml.etree.ElementTree as ET
+from xml.dom import minidom
+
 from ConstructionLibrary import *
 from BaseMaterialLibrary import *
 from HitLocationLibrary import *
@@ -228,8 +233,61 @@ class Armour:
 		print("Locations: {}".format(str(self.locations.name)))
 		print("Time to Don: {}".format(str(self.timeToDon)))
 		print("Notes: {}".format(str(self.notes)))
-	def GCSOutput(self):
-		pass				# HTML-formatted output block for GCS here.
+	def GCSOutput(self, f):
+		et = ET.ElementTree()
+		try:
+			root = et.parse(f)
+		except ET.ParseError:
+			eqpid = uuid4()
+			root = ET.Element("equipment_list", attrib={"id": str(eqpid), "version": str(1)})
+			et = ET.ElementTree(element=root)
+
+		equipment = ET.SubElement(root, "equipment", attrib={"version": str(4)})
+
+		quantity = ET.SubElement(equipment, "quantity")
+		quantity.text = "1"
+
+		description = ET.SubElement(equipment, "description")
+		description.text = self.name
+
+		tech_level = ET.SubElement(equipment, "tech_level")
+		tech_level.text = str(self.TL)
+
+		legality_class = ET.SubElement(equipment, "legality_class")
+		legality_class.text = str(self.LC)
+
+		value = ET.SubElement(equipment, "value")
+		value.text = str(self.cost)
+
+		weight = ET.SubElement(equipment, "weight")
+		weight.text = str(self.weight)
+
+		notes = ET.SubElement(equipment, "notes")
+		notes.text = str(self.notes)
+
+		categories = ET.SubElement(equipment, "categories")
+		category = ET.SubElement(categories, "category")
+		category.text = "Armor"
+
+		for locationName in self.locations.GCSNames:
+			dr_bonus = ET.SubElement(equipment, "dr_bonus")
+			location = ET.SubElement(dr_bonus, "location")
+			location.text = locationName
+			amount = ET.SubElement(dr_bonus, "amount")
+			amount.text = str(self.DR)
+
+		# Rewrite the file's contents as the new XML tree
+		f.seek(0)
+		f.truncate(0)
+		et.write(f, xml_declaration=True)
+
+		# Rewrite the XML tree in "pretty" form,
+		# since GCS's XML parsing is line-based.
+		f.seek(0)
+		doc = minidom.parse(f)
+		f.seek(0)
+		f.truncate(0)
+		f.write(doc.toprettyxml().encode())
 	def debugOutput(self):
 		print("\nArmour Name: {}".format(self.name))
 		if "Superscience" in self.material.keywords:
@@ -336,6 +394,11 @@ You can use any combination of the hit locations and sub-locations, but be aware
 	UserDefinedArmour = Armour(TempName,TempTL,TempDR,TempLocations,TempMaterial,TempConstruction)
 	UserDefinedArmour.keywords.extend(TempQualities)
 	UserDefinedArmour.execute()
+
+	OutFile = input("Enter file name to save output to or blank to skip writing:\n")
+	if OutFile:
+		with open(OutFile, "r+b" if os.path.exists(OutFile) else "w+b") as f:
+			UserDefinedArmour.GCSOutput(f)
 
 	print("\n- - - - - - - - - - - - - - -\n")
 
